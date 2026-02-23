@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Citizen | 新手啟航教學指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #050b14;
+            color: #e2e8f0;
+        }
+        .sci-fi-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .accent-glow {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+    </style>
+</head>
+<body class="leading-relaxed">
+
+    <nav class="sticky top-0 z-50 bg-slate-900/90 border-b border-cyan-900/50 px-6 py-4 backdrop-blur-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="sci-fi-font text-xl font-bold text-cyan-400 tracking-widest">UEE ACADEMY</h1>
+            <div class="space-x-6 text-sm">
+                <a href="#basics" class="hover:text-cyan-400 transition">基礎操作</a>
+                <a href="#flight" class="hover:text-cyan-400 transition">飛行指南</a>
+                <a href="#keys" class="hover:text-cyan-400 transition">快捷鍵表</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative h-64 flex items-center justify-center bg-gradient-to-b from-slate-800 to-slate-950 overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+        <div class="text-center z-10">
+            <h2 class="sci-fi-font text-4xl md:text-5xl font-bold mb-2 text-white">STAR CITIZEN</h2>
+            <p class="text-cyan-400 tracking-widest uppercase text-sm">新手起步與熱鍵教學</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 space-y-20">
+
+        <section id="basics" class="scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="h-8 w-1 bg-cyan-500"></div>
+                <h3 class="text-2xl font-bold">如何領取你的船隻？</h3>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-lg accent-glow">
+                    <div class="text-cyan-500 mb-4 font-bold text-xl">01. 尋找終端機</div>
+                    <p class="text-slate-400 text-sm">在太空港尋找寫著 <strong>ASOP Vehicle Retrieval</strong> 的藍色螢幕。</p>
+                </div>
+                <div class="glass-card p-6 rounded-lg accent-glow">
+                    <div class="text-cyan-500 mb-4 font-bold text-xl">02. 點擊 Retrieve</div>
+                    <p class="text-slate-400 text-sm">選擇你的船隻並領取。畫面會顯示你的船在幾號 <strong>Hangar (機庫)</strong>。</p>
+                </div>
+                <div class="glass-card p-6 rounded-lg accent-glow">
+                    <div class="text-cyan-500 mb-4 font-bold text-xl">03. 搭乘電梯</div>
+                    <p class="text-slate-400 text-sm">找到電梯，在面板選擇對應的 Hangar 編號前往。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="flight" class="scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="h-8 w-1 bg-cyan-500"></div>
+                <h3 class="text-2xl font-bold">起飛與離港程序</h3>
+            </div>
+            <div class="bg-slate-900/50 border border-slate-700 p-8 rounded-xl">
+                <ul class="space-y-6">
+                    <li class="flex items-start">
+                        <span class="bg-cyan-900 text-cyan-300 px-3 py-1 rounded mr-4 text-xs sci-fi-font">R</span>
+                        <div>
+                            <p class="font-bold">啟動電源與引擎 (Ready for Flight)</p>
+                            <p class="text-slate-400 text-sm">坐進駕駛艙後按下 R，系統會自動啟動所有裝置。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-cyan-900 text-cyan-300 px-3 py-1 rounded mr-4 text-xs sci-fi-font">ALT + N</span>
+                        <div>
+                            <p class="font-bold">請求起飛許可</p>
+                            <p class="text-slate-400 text-sm">對機庫塔台發送訊號，機庫大門才會開啟。</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-cyan-900 text-cyan-300 px-3 py-1 rounded mr-4 text-xs sci-fi-font">Space</span>
+                        <div>
+                            <p class="font-bold">垂直上升</p>
+                            <p class="text-slate-400 text-sm">輕按空白鍵，平穩地離開停機坪。</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="keys" class="scroll-mt-24">
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="h-8 w-1 bg-cyan-500"></div>
+                <h3 class="text-2xl font-bold text-white">核心熱鍵清單</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse glass-card rounded-lg">
+                    <thead>
+                        <tr class="bg-cyan-900/20 text-cyan-400 border-b border-slate-700">
+                            <th class="p-4">功能項目</th>
+                            <th class="p-4">熱鍵</th>
+                            <th class="p-4">備註</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <tr class="border-b border-slate-800 hover:bg-white/5">
+                            <td class="p-4">互動模式 (Inner Thought)</td>
+                            <td class="p-4 text-orange-400 font-mono">F (按住)</td>
+                            <td class="p-4 text-slate-400">遊戲中最常用的按鍵。</td>
+                        </tr>
+                        <tr class="border-b border-slate-800 hover:bg-white/5">
+                            <td class="p-4">物品清單 (Inventory)</td>
+                            <td class="p-4 text-orange-400 font-mono">I</td>
+                            <td class="p-4 text-slate-400">更換裝備、吃喝。</td>
+                        </tr>
+                        <tr class="border-b border-slate-800 hover:bg-white/5">
+                            <td class="p-4">量子跳躍 (QT) 開啟/關閉</td>
+                            <td class="p-4 text-orange-400 font-mono">B</td>
+                            <td class="p-4 text-slate-400">按一下掃描點位，長按啟動跳躍。</td>
+                        </tr>
+                        <tr class="border-b border-slate-800 hover:bg-white/5">
+                            <td class="p-4">收放起落架</td>
+                            <td class="p-4 text-orange-400 font-mono">N</td>
+                            <td class="p-4 text-slate-400">降落前務必確認是否放下。</td>
+                        </tr>
+                        <tr class="border-b border-slate-800 hover:bg-white/5">
+                            <td class="p-4">全船解鎖</td>
+                            <td class="p-4 text-orange-400 font-mono">Alt + U</td>
+                            <td class="p-4 text-slate-400">讓隊友可以打開你的船門。</td>
+                        </tr>
+                        <tr class="hover:bg-white/5">
+                            <td class="p-4 text-red-400 font-bold">自殺 / 重生</td>
+                            <td class="p-4 text-red-400 font-mono">Backspace (長按)</td>
+                            <td class="p-4 text-slate-400 text-xs">遇到 Bug 卡住時的最後手段。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 py-12 text-center text-slate-500 text-sm">
+        <p class="mb-2 uppercase tracking-tighter sci-fi-font text-cyan-900 text-lg italic">See you in the Verse.</p>
+        <p>© 2026 Star Citizen 教學網頁 - 僅供教學與交流使用</p>
+        <p class="mt-4">適用版本：Alpha 4.0+</p>
+    </footer>
+
+</body>
+</html>
