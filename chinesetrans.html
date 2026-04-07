@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繁體中文安裝教學 | Star Citizen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00d2ff;
+            --secondary-color: #3a7bd5;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .guide-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .step {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .step-number {
+            background: var(--primary-color);
+            color: var(--bg-dark);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        .step-content h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+        }
+
+        .code-block {
+            background: #000;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #50fa7b;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .step { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>星際公民 繁體中文</h1>
+        <p class="subtitle">Star Citizen Traditional Chinese Localization</p>
+    </header>
+
+    <main class="guide-card">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>獲取檔案</h3>
+                <p>前往 GitHub 專案頁面，點選右上角的綠色按鈕 <span class="highlight">Code</span>，接著選擇 <span class="highlight">Download ZIP</span> 下載最新版本。</p>
+                <a href="https://github.com/taksito/starcitizen-chinese_traditional" target="_blank" class="btn">
+                    <i class="fab fa-github"></i> 前往 GitHub 倉庫
+                </a>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>解壓縮檔案</h3>
+                <p>打開下載的 ZIP 壓縮檔，進入資料夾 <code>starcitizen-chinese_traditional-main</code>，你會看到以下內容：</p>
+                <ul>
+                    <li><code>data</code> 資料夾</li>
+                    <li><code>user.cfg</code> 檔案</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>安裝至遊戲目錄</h3>
+                <p>將上述的 <span class="highlight">data 資料夾</span> 與 <span class="highlight">user.cfg 檔案</span> 複製並貼上到你的星際公民遊戲安裝路徑中的 <code>LIVE</code> 資料夾下。</p>
+                <p>一般預設路徑參考：</p>
+                <div class="code-block">
+                    C:\Program Files\Roberts Space Industries\StarCitizen\LIVE\
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h3>完成安裝</h3>
+                <p>重新啟動遊戲，即可享受繁體中文介面。若更新後失效，請重新執行上述步驟覆蓋檔案。</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 CHSC-TW | Star Citizen Community Project</p>
+    </footer>
+</div>
+
+</body>
+</html>
