@@ -3,82 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中文字元轉換器</title>
+    <title>Star Citizen 中文字元轉換器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --bg-dark: #050b14;
+            --card-bg: #0f172a;
+            --input-bg: #1e293b;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --success: #10b981;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
             line-height: 1.6;
-            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
         }
+
         .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(56, 189, 248, 0.2);
         }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-top: 0;
+            letter-spacing: 2px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .status {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+
         .input-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
         }
+
         input[type="text"] {
-            flex: 1;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #334155;
+            border-radius: 8px;
             font-size: 16px;
-        }
-        button {
-            padding: 12px 24px;
-            background-color: #007bff;
+            background: var(--input-bg);
             color: white;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.2s;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-family: 'Noto Sans TC', sans-serif;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        #convertBtn {
+            background-color: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
         }
+
+        #convertBtn:hover:not(:disabled) {
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        #convertCopyBtn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        #convertCopyBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+        }
+
         button:disabled {
-            background-color: #ccc;
+            opacity: 0.5;
             cursor: not-allowed;
+            filter: grayscale(1);
         }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
         .result-area {
-            margin-top: 20px;
             padding: 20px;
-            background-color: #f8f9fa;
-            border-left: 5px solid #007bff;
-            min-height: 50px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            min-height: 60px;
             word-break: break-all;
-            font-family: monospace;
-            font-size: 18px;
-            color: #333;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            color: var(--primary);
         }
-        .status {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
+
+        .footer-note {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .button-row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>中文字元轉換器</h2>
-    <div id="status" class="status">正在載入字典檔...</div>
+    <h2>Chinese Translator</h2>
+    <div id="status" class="status">正在同步 UEE 字典檔...</div>
     
     <div class="input-group">
-        <input type="text" id="chinseInput" placeholder="請輸入中文字，例如：看不到" />
-        <button id="convertBtn" disabled>轉換</button>
+        <input type="text" id="chinseInput" placeholder="請輸入中文字或中英混合內容..." />
+        <div class="button-row">
+            <button id="convertBtn" disabled>僅轉換</button>
+            <button id="convertCopyBtn" disabled>轉換並複製到剪貼簿</button>
+        </div>
     </div>
 
+    <div class="result-label">輸出結果：</div>
     <div class="result-area" id="resultOutput">
-        轉換結果將顯示在此處...
+        等待輸入內容...
+    </div>
+
+    <div class="footer-note">
+        自動處理：中英文字間補空格 | 前綴自動加上 [zh]
     </div>
 </div>
 
@@ -87,62 +186,89 @@
     const charMap = {};
     const inputEl = document.getElementById('chinseInput');
     const btnEl = document.getElementById('convertBtn');
+    const copyBtnEl = document.getElementById('convertCopyBtn');
     const resultEl = document.getElementById('resultOutput');
     const statusEl = document.getElementById('status');
 
-    // 1. 從 GitHub 抓取檔案並建立對照表
+    // 1. 從 GitHub 載入字典檔
     async function loadDictionary() {
         try {
             const response = await fetch(dictionaryUrl);
-            if (!response.ok) throw new Error('無法讀取字典檔');
+            if (!response.ok) throw new Error('Network response was not ok');
             const text = await response.text();
             
-            // 解析文字檔，格式如：00=一
             const lines = text.split(/\r?\n/);
             lines.forEach(line => {
                 const parts = line.split('=');
                 if (parts.length === 2) {
-                    const code = parts[0].trim();
-                    const char = parts[1].trim();
-                    // 建立 反向索引：字 -> 編碼
-                    charMap[char] = code;
+                    charMap[parts[1].trim()] = parts[0].trim();
                 }
             });
 
-            statusEl.innerText = '字典載入成功，可以開始轉換。';
+            statusEl.innerText = '字典載入成功。您可以輸入中英混合內容。';
             btnEl.disabled = false;
+            copyBtnEl.disabled = false;
         } catch (error) {
-            console.error(error);
-            statusEl.innerText = '載入失敗，請確認網路連線或網址是否正確。';
-            statusEl.style.color = 'red';
+            console.error('Load error:', error);
+            statusEl.innerText = '載入失敗，請重新整理網頁。';
+            statusEl.style.color = '#f87171';
         }
     }
 
-    // 2. 轉換邏輯
-    function convert() {
-        const inputText = inputEl.value;
+    // 2. 核心轉換邏輯
+    function getConvertedText() {
+        let inputText = inputEl.value;
+        if (!inputText.trim()) return "";
+        
+        // A. 自動在中文與英數字交界處補空格
+        // 規則：中文字 + 英數字 -> 中文字 + " " + 英數字
+        inputText = inputText.replace(/([\u4e00-\u9fa5])([a-zA-Z0-9])/g, '$1 $2');
+
         let result = "";
-
         for (let char of inputText) {
-            if (charMap[char]) {
-                // 格式：@ + 編碼
-                result += "@" + charMap[char];
-            } else {
-                // 如果字典裡找不到，保留原字或跳過
-                result += char; 
-            }
+            // 如果字典有該字則轉碼 (@XX)，否則保留原樣 (英文、數字、空格)
+            result += charMap[char] ? ("@" + charMap[char]) : char;
         }
 
-        resultEl.innerText = result || "無轉換結果";
+        // B. 最前面加上 [zh]
+        return "[zh]" + result;
     }
 
-    // 綁定事件
-    btnEl.addEventListener('click', convert);
+    // 3. 處理顯示
+    function handleConvert() {
+        const result = getConvertedText();
+        resultEl.innerText = result || "無轉換結果";
+        return result;
+    }
+
+    // 4. 處理複製
+    async function handleConvertAndCopy() {
+        const result = handleConvert();
+        if (!result || result === "[zh]") return;
+
+        try {
+            await navigator.clipboard.writeText(result);
+            const originalText = copyBtnEl.innerText;
+            copyBtnEl.innerText = "✓ 已複製到剪貼簿";
+            copyBtnEl.style.background = "#10b981";
+            
+            setTimeout(() => {
+                copyBtnEl.innerText = originalText;
+                copyBtnEl.style.background = "";
+            }, 2000);
+        } catch (err) {
+            alert("自動複製失敗，請手動複製結果區域。");
+        }
+    }
+
+    // 事件監聽
+    btnEl.addEventListener('click', handleConvert);
+    copyBtnEl.addEventListener('click', handleConvertAndCopy);
     inputEl.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') convert();
+        if (e.key === 'Enter') handleConvertAndCopy();
     });
 
-    // 初始化
+    // 啟動載入
     loadDictionary();
 </script>
 
