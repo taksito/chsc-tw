@@ -2,93 +2,71 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>GitHub 自動解析中文轉換器</title>
+    <title>GitHub 中文編號轉換器 - 增強版</title>
     <style>
-        body { font-family: "Microsoft JhengHei", sans-serif; padding: 40px; background-color: #f4f7f6; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        textarea { width: 100%; height: 200px; padding: 15px; font-size: 18px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; resize: vertical; }
-        .status { margin-top: 10px; font-size: 14px; padding: 10px; border-radius: 4px; }
-        .loading { background-color: #e2f3ff; color: #0056b3; }
-        .success { background-color: #d4edda; color: #155724; }
-        .error { background-color: #f8d7da; color: #721c24; }
+        body { font-family: "Microsoft JhengHei", sans-serif; padding: 30px; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h2 { border-left: 5px solid #007bff; padding-left: 15px; margin-bottom: 20px; }
+        
+        .section-label { font-weight: bold; margin-bottom: 8px; display: block; color: #555; }
+        textarea { width: 100%; height: 180px; padding: 15px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; margin-bottom: 15px; line-height: 1.5; }
+        
+        .btn-group { margin-bottom: 20px; display: flex; gap: 10px; }
+        button { padding: 12px 24px; font-size: 16px; cursor: pointer; border: none; border-radius: 6px; transition: 0.2s; font-weight: bold; }
+        .btn-convert { background-color: #007bff; color: white; flex: 2; }
+        .btn-convert:hover { background-color: #0056b3; }
+        .btn-copy { background-color: #28a745; color: white; flex: 1; }
+        .btn-copy:hover { background-color: #218838; }
+
+        .status { padding: 10px 15px; border-radius: 6px; font-size: 14px; margin-bottom: 20px; }
+        .loading { background: #fff3cd; color: #856404; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        
+        .result-area { background-color: #f8f9fa; border: 2px dashed #dee2e6; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>中文編號即時轉換器</h2>
-    <div id="status" class="status loading">正在載入 GitHub 遠端對照表...</div>
-    <p>使用方式：輸入中文字後按下「空白鍵」，系統將自動轉換（如：輸入「看 」變「@YC」）。</p>
-    <textarea id="editor" placeholder="請在此輸入文字..."></textarea>
+    <h2>中文編號轉換系統</h2>
+    
+    <div id="status" class="status loading">正在連線至 GitHub 載入對照表...</div>
+
+    <span class="section-label">原始輸入區：</span>
+    <textarea id="editor" placeholder="在此輸入中文內容..."></textarea>
+
+    <div class="btn-group">
+        <button class="btn-convert" onclick="convertAll()">逐字轉換全部文字 ↓</button>
+        <button class="btn-copy" onclick="copyResult()">複製結果</button>
+    </div>
+
+    <span class="section-label">轉換後結果（可直接複製）：</span>
+    <textarea id="result" class="result-area" readonly placeholder="轉換後的結果會顯示在這裡..."></textarea>
 </div>
 
 <script>
-    // 請將下方網址替換為您 GitHub 上的 textinput.txt 的 Raw 網址
-    const GITHUB_URL = 'https://raw.githubusercontent.com/taksito/chsc-tw/refs/heads/main/textinput.txt';
+    // 請替換為您的 GitHub Raw URL
+    const GITHUB_URL = 'https://raw.githubusercontent.com/您的帳號/專案名/主分支/textinput.txt';
     
     let charToCodeMap = {};
 
-    // 從 GitHub 抓取並解析檔案
+    // 載入 GitHub 檔案
     async function loadConfig() {
         const statusEl = document.getElementById('status');
         try {
             const response = await fetch(GITHUB_URL);
-            if (!response.ok) throw new Error('無法讀取檔案');
-            
+            if (!response.ok) throw new Error('讀取失敗');
             const text = await response.text();
-            const lines = text.split(/\r?\n/);
             
-            lines.forEach(line => {
-                const [code, char] = line.split('=');
-                if (code && char) {
-                    charToCodeMap[char.trim()] = code.trim();
+            text.split(/\r?\n/).forEach(line => {
+                const parts = line.split('=');
+                if (parts.length >= 2) {
+                    const code = parts[0].trim();
+                    const char = parts[1].trim();
+                    if (char) charToCodeMap[char] = code;
                 }
             });
 
             statusEl.className = 'status success';
-            statusEl.innerText = `成功載入對照表！目前共有 ${Object.keys(charToCodeMap).length} 個字元。`;
-        } catch (error) {
-            statusEl.className = 'status error';
-            statusEl.innerText = '載入失敗，請檢查 GitHub 網址是否正確。';
-            console.error(error);
-        }
-    }
-
-    const editor = document.getElementById('editor');
-
-    // 監聽鍵盤事件
-    editor.addEventListener('keyup', function(e) {
-        // 當按下空白鍵 (Space) 時觸發
-        if (e.code === 'Space') {
-            const content = this.value;
-            const cursorContent = content.substring(0, this.selectionStart);
-            const afterContent = content.substring(this.selectionStart);
-
-            // 取得空格前的一個字
-            // 由於按下空格後游標在空格後，所以要抓取空格前兩個位置（最後一個字）
-            const lastCharMatch = cursorContent.match(/([\u4E00-\u9FFF])\s$/);
-            
-            if (lastCharMatch) {
-                const targetChar = lastCharMatch[1];
-                if (charToCodeMap[targetChar]) {
-                    const code = charToCodeMap[targetChar];
-                    const replacement = `@${code}`;
-                    
-                    // 執行替換：移除「原中文字+空格」，換成「@編號」
-                    const newCursorContent = cursorContent.replace(new RegExp(targetChar + '\\s$'), replacement);
-                    this.value = newCursorContent + afterContent;
-                    
-                    // 保持游標在正確位置
-                    this.setSelectionRange(newCursorContent.length, newCursorContent.length);
-                }
-            }
-        }
-    });
-
-    // 初始化載入
-    loadConfig();
-</script>
-
-</body>
-</html>
+            statusEl.innerText =
