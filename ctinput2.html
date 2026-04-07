@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中文字元轉換器</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+            background-color: #050b14; /* 配合你 index.html 的深色調 */
+            color: #e2e8f0;
+        }
+        .container {
+            background: #0f172a;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            font-size: 16px;
+            background: #1e293b;
+            color: white;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+            font-weight: bold;
+        }
+        .btn-copy {
+            background-color: #10b981; /* 綠色代表複製 */
+        }
+        button:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        button:disabled {
+            background-color: #334155;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+        .result-area {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1e293b;
+            border-left: 5px solid #007bff;
+            min-height: 50px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 18px;
+            color: #38bdf8;
+        }
+        .status {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>中文字元轉換器</h2>
+    <div id="status" class="status">正在載入字典檔...</div>
+    
+    <div class="input-group">
+        <input type="text" id="chinseInput" placeholder="請輸入中文字，例如：看不到" />
+        <button id="convertBtn" disabled>轉換</button>
+        <button id="convertCopyBtn" class="btn-copy" disabled>轉換並複製</button>
+    </div>
+
+    <div class="result-area" id="resultOutput">
+        轉換結果將顯示在此處...
+    </div>
+</div>
+
+<script>
+    const dictionaryUrl = 'https://raw.githubusercontent.com/taksito/chsc-tw/refs/heads/main/textinput.txt';
+    const charMap = {};
+    const inputEl = document.getElementById('chinseInput');
+    const btnEl = document.getElementById('convertBtn');
+    const copyBtnEl = document.getElementById('convertCopyBtn');
+    const resultEl = document.getElementById('resultOutput');
+    const statusEl = document.getElementById('status');
+
+    // 1. 從 GitHub 抓取檔案並建立對照表
+    async function loadDictionary() {
+        try {
+            const response = await fetch(dictionaryUrl);
+            if (!response.ok) throw new Error('無法讀取字典檔');
+            const text = await response.text();
+            
+            const lines = text.split(/\r?\n/);
+            lines.forEach(line => {
+                const parts = line.split('=');
+                if (parts.length === 2) {
+                    charMap[parts[1].trim()] = parts[0].trim();
+                }
+            });
+
+            statusEl.innerText = '字典載入成功，可以開始轉換。';
+            btnEl.disabled = false;
+            copyBtnEl.disabled = false;
+        } catch (error) {
+            console.error(error);
+            statusEl.innerText = '載入失敗，請檢查字典檔路徑。';
+            statusEl.style.color = '#f87171';
+        }
+    }
+
+    // 2. 轉換邏輯
+    function getConvertedText() {
+        const inputText = inputEl.value;
+        if (!inputText) return "";
+        
+        let result = "";
+        for (let char of inputText) {
+            result += charMap[char] ? ("@" + charMap[char]) : char;
+        }
+        return result;
+    }
+
+    // 3. 執行轉換
+    function handleConvert() {
+        const result = getConvertedText();
+        resultEl.innerText = result || "無轉換結果";
+        return result;
+    }
+
+    // 4. 轉換並複製
+    async function handleConvertAndCopy() {
+        const result = handleConvert();
+        if (!result) return;
+
+        try {
+            await navigator.clipboard.writeText(result);
+            const originalText = copyBtnEl.innerText;
+            copyBtnEl.innerText = "已複製！";
+            copyBtnEl.style.backgroundColor = "#059669";
+            
+            setTimeout(() => {
+                copyBtnEl.innerText = originalText;
+                copyBtnEl.style.backgroundColor = "";
+            }, 2000);
+        } catch (err) {
+            alert("無法自動複製，請手動選取文字。");
+        }
+    }
+
+    // 綁定事件
+    btnEl.addEventListener('click', handleConvert);
+    copyBtnEl.addEventListener('click', handleConvertAndCopy);
+    inputEl.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleConvert();
+    });
+
+    // 初始化
+    loadDictionary();
+</script>
+
+</body>
+</html>
