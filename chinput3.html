@@ -301,7 +301,7 @@
         const encoded = encodeText(rawInput);
         const translated = await translateText(rawInput);
         
-        const finalStr = `[zh]${encoded} [en]${translated}`;
+        const finalStr = `[zh]${encoded} \n [en]${translated}`;
         resultEl.innerText = finalStr;
 
         await copyToClipboard(finalStr, translateBtnEl);
