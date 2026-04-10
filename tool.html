@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星際公民工具手冊 - 工具網頁</title>
+    <style>
+        :root {
+            --citizen-blue: #00d4ff;
+            --dark-bg: #0a0e14;
+            --card-bg: #161d26;
+            --text-gray: #a0aab7;
+        }
+
+        body {
+            font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+            background-color: var(--dark-bg);
+            color: white;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 2px solid var(--citizen-blue);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 { color: var(--citizen-blue); letter-spacing: 2px; }
+        h2 { color: var(--citizen-blue); border-left: 4px solid var(--citizen-blue); padding-left: 15px; margin-top: 40px; }
+
+        .tool-section {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        th { color: var(--citizen-blue); font-weight: bold; }
+        td { color: var(--text-gray); }
+
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 50px auto;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            color: var(--citizen-blue);
+            border: 1px solid var(--citizen-blue);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: var(--citizen-blue);
+            color: black;
+            box-shadow: 0 0 15px var(--citizen-blue);
+        }
+
+        .usage-tag {
+            background: #1a3a4a;
+            color: #00d4ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>星際公民工具網頁</h1>
+        <p>專業作業設備指南 - Citizen Tool Guide</p>
+    </header>
+
+    <section class="tool-section">
+        <h2>Cambio-SRT 手持式打磨維修槍</h2>
+        <p>Cambio-SRT 是一款專門用於船艦修補與廢料回收（Salvage）的專業工具，能夠將廢棄船殼轉化為 RMC 資源。</p>
+        
+        <table>
+            <tr>
+                <th>配件名稱</th>
+                <th>用途說明</th>
+            </tr>
+            <tr>
+                <td><b style="color:white;">Cambio-SRT Attachment</b></td>
+                <td>基礎打磨配件，可吸取船體外殼並填充至 RMC 罐。</td>
+            </tr>
+            <tr>
+                <td><b style="color:white;">Cinchtite 磁力罐</b></td>
+                <td>用於儲存回收的物質，滿了之後可更換。</td>
+            </tr>
+        </table>
+        <p><span class="usage-tag">主要用途</span>：野外緊急修補船體、非法或合法的小規模外殼打磨回收。</p>
+    </section>
+
+    <section class="tool-section">
+        <h2>Multi-Tool 多功能萬用工具</h2>
+        <p>由 Greycat Industrial 生產，是每位市民必備的工具，透過更換不同藍圖配件來適應多種工作環境。</p>
+        
+        <table>
+            <tr>
+                <th>配件名稱</th>
+                <th>用途說明</th>
+            </tr>
+            <tr>
+                <td><b style="color:white;">Tractor Beam (牽引光束)</b></td>
+                <td>搬運貨物、移動物品或在無重力空間抓取物體移動。</td>
+            </tr>
+            <tr>
+                <td><b style="color:white;">Mining (採礦)</b></td>
+                <td>用於手持採礦（如：Hadanite、Aphorite），具備熱能控制介面。</td>
+            </tr>
+            <tr>
+                <td><b style="color:white;">Medical (醫療)</b></td>
+                <td>遠程注射藥物，可治療受傷或施放止痛藥。</td>
+            </tr>
+            <tr>
+                <td><b style="color:white;">Cutting (切割)</b></td>
+                <td>在特定任務中切開門鎖或金屬結構。</td>
+            </tr>
+            <tr>
+                <td><b style="color:white;">Salvage (回收)</b></td>
+                <td>基礎修補與打磨附件（功能類似縮小版的 Cambio）。</td>
+            </tr>
+        </table>
+        <p><span class="usage-tag">主要用途</span>：貨運搬運、野外採礦、急救、工程維護。</p>
+    </section>
+
+    <a href="index.html" class="back-btn">返回首頁</a>
+
+</div>
+
+</body>
+</html>
