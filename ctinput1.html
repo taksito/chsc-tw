@@ -297,7 +297,7 @@
         try {
             const encoded = encodeText(rawInput);
             const translated = await translateText(rawInput);
-            const finalStr = `[zh]${encoded}\n[en]${translated}`;
+            const finalStr = `[zh]${encoded} [en]${translated}`;
             resultEl.innerText = finalStr;
 
             // 修正：將 originalBtnText 傳入，防止還原成「翻譯中」
