@@ -216,7 +216,7 @@
         try {
             const enc = encodeText(raw).trim();
             const trans = (await translateText(raw)).trim();
-            const finalStr = `[zh]${enc}\n[en]${trans}`;
+            const finalStr = `[zh]${enc} [en]${trans}`;
             resultEl.innerText = finalStr;
             await copyToClipboard(finalStr, translateBtnEl, oldT);
         } finally {
