@@ -153,7 +153,6 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 1.1rem;
             color: var(--primary);
-            /* 修正換行顯示 */
             white-space: pre-wrap; 
         }
 
@@ -254,30 +253,30 @@
         }
     }
 
-    async function copyToClipboard(text, targetBtn) {
+    // 修正：增加 overrideText 參數，確保能還原到正確文字
+    async function copyToClipboard(text, targetBtn, overrideText) {
         try {
             await navigator.clipboard.writeText(text);
-            const originalText = targetBtn.innerText;
-            targetBtn.innerText = "✓ 已複製";
+            const originalText = overrideText || targetBtn.innerText;
             const originalBg = targetBtn.style.background;
+            
+            targetBtn.innerText = "✓ 已複製";
             targetBtn.style.background = "#10b981";
+            
             setTimeout(() => {
                 targetBtn.innerText = originalText;
                 targetBtn.style.background = originalBg;
-            }, 2000);
+            }, 1500); // 縮短一點顯示時間更順手
         } catch (err) {
             console.error("Copy failed:", err);
-            // 這裡不報 alert 避免打斷流程
         }
     }
 
-    // 僅轉碼
     btnEl.addEventListener('click', () => {
         const encoded = encodeText(inputEl.value);
         resultEl.innerText = encoded ? "[zh]" + encoded : "無轉換結果";
     });
 
-    // 轉碼並複製
     copyBtnEl.addEventListener('click', async () => {
         const encoded = encodeText(inputEl.value);
         if (!encoded) return;
@@ -286,11 +285,11 @@
         await copyToClipboard(finalStr, copyBtnEl);
     });
 
-    // 轉碼 + 翻譯 + 複製
     translateBtnEl.addEventListener('click', async () => {
         const rawInput = inputEl.value;
         if (!rawInput.trim()) return;
 
+        // 備份最初的按鈕文字
         const originalBtnText = translateBtnEl.innerText;
         translateBtnEl.innerText = "⏳ 翻譯中...";
         translateBtnEl.disabled = true;
@@ -298,18 +297,16 @@
         try {
             const encoded = encodeText(rawInput);
             const translated = await translateText(rawInput);
-            
-            // 使用 \n 進行換行
             const finalStr = `[zh]${encoded}\n[en]${translated}`;
             resultEl.innerText = finalStr;
 
-            await copyToClipboard(finalStr, translateBtnEl);
+            // 修正：將 originalBtnText 傳入，防止還原成「翻譯中」
+            await copyToClipboard(finalStr, translateBtnEl, originalBtnText);
         } catch (err) {
             console.error(err);
             resultEl.innerText = "發生錯誤，請稍後再試。";
-        } finally {
-            // 確保無論如何都會恢復按鈕狀態
             translateBtnEl.innerText = originalBtnText;
+        } finally {
             translateBtnEl.disabled = false;
         }
     });
