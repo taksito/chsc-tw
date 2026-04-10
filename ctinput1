@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Citizen 中文字元轉換器 Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --bg-dark: #050b14;
+            --card-bg: #0f172a;
+            --input-bg: #1e293b;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-top: 0;
+            letter-spacing: 2px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .status {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--input-bg);
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        #convertBtn {
+            background-color: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        #convertBtn:hover:not(:disabled) {
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        #convertCopyBtn {
+            background: rgba(58, 123, 213, 0.3);
+            border: 1px solid var(--secondary);
+            color: white;
+        }
+
+        #translateBtn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            flex: 1.5;
+        }
+
+        #translateBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .result-area {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px dashed #334155;
+            min-height: 60px;
+            word-break: break-all;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            color: var(--primary);
+            /* 修正換行顯示 */
+            white-space: pre-wrap; 
+        }
+
+        .footer-note {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .button-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Chinese Translator Pro</h2>
+    <div id="status" class="status">正在同步 UEE 字典檔...</div>
+    
+    <div class="input-group">
+        <input type="text" id="chinseInput" placeholder="請輸入中文內容..." />
+        <div class="button-row">
+            <button id="convertBtn" disabled>僅轉碼</button>
+            <button id="convertCopyBtn" disabled>轉碼並複製</button>
+            <button id="translateBtn" disabled>🚀 轉碼 + 翻譯 (EN) 並複製</button>
+        </div>
+    </div>
+
+    <div class="result-label">輸出結果：</div>
+    <div class="result-area" id="resultOutput">等待輸入內容...</div>
+
+    <div class="footer-note">
+        自動處理：中英文字間補空格 | 前綴 [zh] | 後綴 [en] 翻譯 (分行顯示)
+    </div>
+</div>
+
+<script>
+    const dictionaryUrl = 'https://raw.githubusercontent.com/taksito/chsc-tw/refs/heads/main/textinput.txt';
+    const charMap = {};
+    const inputEl = document.getElementById('chinseInput');
+    const btnEl = document.getElementById('convertBtn');
+    const copyBtnEl = document.getElementById('convertCopyBtn');
+    const translateBtnEl = document.getElementById('translateBtn');
+    const resultEl = document.getElementById('resultOutput');
+    const statusEl = document.getElementById('status');
+
+    async function loadDictionary() {
+        try {
+            const response = await fetch(dictionaryUrl);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const text = await response.text();
+            
+            const lines = text.split(/\r?\n/);
+            lines.forEach(line => {
+                const parts = line.split('=');
+                if (parts.length === 2) {
+                    charMap[parts[1].trim()] = parts[0].trim();
+                }
+            });
+
+            statusEl.innerText = '字典載入成功。準備好進入宇宙了嗎？';
+            [btnEl, copyBtnEl, translateBtnEl].forEach(b => b.disabled = false);
+        } catch (error) {
+            console.error('Load error:', error);
+            statusEl.innerText = '載入失敗，請檢查網路後重新整理。';
+            statusEl.style.color = '#f87171';
+        }
+    }
+
+    function encodeText(text) {
+        if (!text.trim()) return "";
+        let processedText = text.replace(/([\u4e00-\u9fa5])([a-zA-Z0-9])/g, '$1 $2');
+        processedText = processedText.replace(/([a-zA-Z0-9])([\u4e00-\u9fa5])/g, '$1 $2');
+
+        let result = "";
+        for (let char of processedText) {
+            result += charMap[char] ? ("@" + charMap[char]) : char;
+        }
+        return result;
+    }
+
+    async function translateText(text) {
+        if (!text.trim()) return "";
+        try {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURIComponent(text)}`;
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Translation API Error');
+            const data = await response.json();
+            if (data && data[0]) {
+                return data[0].map(item => item[0]).join('');
+            }
+            return "(Translation Empty)";
+        } catch (error) {
+            console.error("Translation error:", error);
+            return "(Translation Error)";
+        }
+    }
+
+    async function copyToClipboard(text, targetBtn) {
+        try {
+            await navigator.clipboard.writeText(text);
+            const originalText = targetBtn.innerText;
+            targetBtn.innerText = "✓ 已複製";
+            const originalBg = targetBtn.style.background;
+            targetBtn.style.background = "#10b981";
+            setTimeout(() => {
+                targetBtn.innerText = originalText;
+                targetBtn.style.background = originalBg;
+            }, 2000);
+        } catch (err) {
+            console.error("Copy failed:", err);
+            // 這裡不報 alert 避免打斷流程
+        }
+    }
+
+    // 僅轉碼
+    btnEl.addEventListener('click', () => {
+        const encoded = encodeText(inputEl.value);
+        resultEl.innerText = encoded ? "[zh]" + encoded : "無轉換結果";
+    });
+
+    // 轉碼並複製
+    copyBtnEl.addEventListener('click', async () => {
+        const encoded = encodeText(inputEl.value);
+        if (!encoded) return;
+        const finalStr = "[zh]" + encoded;
+        resultEl.innerText = finalStr;
+        await copyToClipboard(finalStr, copyBtnEl);
+    });
+
+    // 轉碼 + 翻譯 + 複製
+    translateBtnEl.addEventListener('click', async () => {
+        const rawInput = inputEl.value;
+        if (!rawInput.trim()) return;
+
+        const originalBtnText = translateBtnEl.innerText;
+        translateBtnEl.innerText = "⏳ 翻譯中...";
+        translateBtnEl.disabled = true;
+
+        try {
+            const encoded = encodeText(rawInput);
+            const translated = await translateText(rawInput);
+            
+            // 使用 \n 進行換行
+            const finalStr = `[zh]${encoded}\n[en]${translated}`;
+            resultEl.innerText = finalStr;
+
+            await copyToClipboard(finalStr, translateBtnEl);
+        } catch (err) {
+            console.error(err);
+            resultEl.innerText = "發生錯誤，請稍後再試。";
+        } finally {
+            // 確保無論如何都會恢復按鈕狀態
+            translateBtnEl.innerText = originalBtnText;
+            translateBtnEl.disabled = false;
+        }
+    });
+
+    inputEl.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !translateBtnEl.disabled) translateBtnEl.click();
+    });
+
+    loadDictionary();
+</script>
+
+</body>
+</html>
